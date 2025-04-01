@@ -52,3 +52,29 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+# Rider IDE
+.idea/
+*.sln.iml
+
+# Visual Studio Code
+.vscode/
+.vscode-test/
+
+# Local user settings
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Generated files
+*.generated.cs
+*.generated.ts
+
+# Publish output
+publish/
+wwwroot/
+
+# Docker
+docker-compose.override.yml
+.docker/

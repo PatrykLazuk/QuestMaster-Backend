@@ -1,0 +1,6 @@
+@QuestMaster_Backend_HostAddress = http://localhost:5226
+
+GET {{QuestMaster_Backend_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
