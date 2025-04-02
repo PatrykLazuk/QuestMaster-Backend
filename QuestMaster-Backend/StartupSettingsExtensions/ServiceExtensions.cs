@@ -4,6 +4,7 @@ using System.Text;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
 using QuestMaster_Backend.Services;
+using Microsoft.OpenApi.Models;
 
 namespace QuestMaster_Backend.StartupSettingsExtensions
 {
@@ -17,7 +18,28 @@ namespace QuestMaster_Backend.StartupSettingsExtensions
 
             // Rejestracja Swagger
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Description = "Podaj token JWT w formacie 'Bearer {token}'",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                {
+                new OpenApiSecurityScheme {
+                    Reference = new OpenApiReference {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                    }
+                },
+                new string[] { }
+                }
+            });
+            });
 
             // Rejestracja CORS
             services.AddCors(options =>

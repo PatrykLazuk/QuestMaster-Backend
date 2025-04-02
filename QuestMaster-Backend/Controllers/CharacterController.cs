@@ -2,11 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Amazon.DynamoDBv2.DataModel;
 using QuestMaster_Backend.Models;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System;
+using QuestMaster_Backend.DTOs;
 
 namespace QuestMaster_Backend.Controllers
 {
@@ -35,13 +32,24 @@ namespace QuestMaster_Backend.Controllers
         }
 
         // Endpoint POST do tworzenia nowej postaci.
+        // Klient przesyła tylko dane niezbędne do utworzenia postaci (Name, Stats, opcjonalnie CampaignId).
         [HttpPost]
-        public async Task<IActionResult> CreateCharacter([FromBody] Character character)
+        public async Task<IActionResult> CreateCharacter([FromBody] CreateCharacterRequest request)
         {
+            // Pobieramy ID użytkownika z tokenu (zakładamy, że jest ustawione).
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-            character.CharacterId = Guid.NewGuid().ToString();
-            character.UserId = userId;
-            character.CreatedAt = DateTime.UtcNow;
+            
+            // Mapujemy dane z DTO na model domenowy.
+            var character = new Character
+            {
+                CharacterId = Guid.NewGuid().ToString(),
+                // Jeśli kampania nie została przekazana, przypisujemy domyślną wartość "NONE"
+                CampaignId = request.CampaignId ?? "NONE",
+                UserId = userId,
+                Name = request.Name,
+                Stats = request.Stats,
+                CreatedAt = DateTime.UtcNow
+            };
 
             // Zapisujemy postać w DynamoDB.
             await _dbContext.SaveAsync(character);

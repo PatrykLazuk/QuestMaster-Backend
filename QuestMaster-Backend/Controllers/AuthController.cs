@@ -1,14 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
 using Amazon.DynamoDBv2.DataModel;
 using QuestMaster_Backend.Models;
 using QuestMaster_Backend.DTOs;
 using QuestMaster_Backend.Services;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
-using System;
-using BCrypt.Net;
 
 namespace QuestMaster_Backend.Controllers
 {

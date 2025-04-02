@@ -2,11 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Amazon.DynamoDBv2.DataModel;
 using QuestMaster_Backend.Models;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
-using System;
+using QuestMaster_Backend.DTOs;
 
 namespace QuestMaster_Backend.Controllers
 {
@@ -39,14 +36,18 @@ namespace QuestMaster_Backend.Controllers
 
         // Endpoint POST do tworzenia nowej kampanii.
         [HttpPost]
-        public async Task<IActionResult> CreateCampaign([FromBody] Campaign campaign)
+        public async Task<IActionResult> CreateCampaign([FromBody] CreateCampaignRequest request)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-            campaign.CampaignId = Guid.NewGuid().ToString();
-            campaign.OwnerUserId = userId;
-            campaign.CreatedAt = DateTime.UtcNow;
+            var campaign = new Campaign
+            {
+                CampaignId = Guid.NewGuid().ToString(),
+                Name = request.Name,
+                Description = request.Description,
+                OwnerUserId = userId,
+                CreatedAt = DateTime.UtcNow
+            };
 
-            // Zapisujemy kampanię w DynamoDB.
             await _dbContext.SaveAsync(campaign);
             return Ok(campaign);
         }

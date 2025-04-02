@@ -1,6 +1,4 @@
 using Amazon.DynamoDBv2.DataModel;
-using System;
-using System.Collections.Generic;
 
 namespace QuestMaster_Backend.Models
 {
@@ -14,6 +12,8 @@ namespace QuestMaster_Backend.Models
         public required string CharacterId { get; set; }
         
         // Klucz sortujący – identyfikator kampanii, do której należy postać.
+        // Aby spełnić wymogi DynamoDB, wartość ta musi być nie-null. Dlatego, gdy postać nie jest przypisana,
+        // przypiszemy domyślną wartość np. "NONE".
         [DynamoDBRangeKey(AttributeName = "campaignId")]
         public required string CampaignId { get; set; }
         
